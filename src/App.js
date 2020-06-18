@@ -22,6 +22,23 @@ const testData = {
             parameters: ['tacos']
           },
           {
+            conditionGroup: {
+              operator: 'Any',
+              conditions: [
+                {
+                  source: 'FavoriteToothpaste',
+                  operator: 'ContainsText',
+                  parameters: ['Crest']
+                },
+                {
+                  source: 'FavoriteToothpaste',
+                  operator: 'ContainsText',
+                  parameters: ['none']
+                }
+              ]
+            }
+          },
+          {
             source: 'FavoriteColor',
             operator: 'ContainsText',
             parameters: ['blue']
