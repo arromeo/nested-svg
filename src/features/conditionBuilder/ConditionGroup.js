@@ -1,30 +1,32 @@
-import React from 'react'
+import React, { useRef } from 'react'
 
 // Components
+import { Box } from '@material-ui/core'
 import { Condition } from './Condition'
-// {
-//   operator: 'Every',
-//   conditions: [
-//     {
-//       operator: 'ContainsText',
-//       source: 'testId',
-//       parameters: ['apple']
-//     },
-//     {
-//       conditionGroup: {
-//         operator: 'Any',
-//         conditions: [
-//           {
-//             operator: 'DoesNotContainText',
-//             source: 'testId',
-//             parameters: ['pineapple']
-//           }
-//         ]
-//       }
-//     }
-//   ]
-// }
+import { GroupLogicGuide } from './GroupLogicGuide'
 
 export function ConditionGroup({ group }) {
-  return <Condition />
+  const conditionRefs = useRef([])
+
+  const addRef = (ref) => {
+    conditionRefs.current.push(ref)
+  }
+
+  return (
+    <Box display="flex">
+      <GroupLogicGuide nodeList={conditionRefs.current} />
+      <Box flexGrow="1">
+        {group.conditions.map((condition, index) => {
+          return condition.conditionGroup ? (
+            <ConditionGroup
+              key={index}
+              group={condition.conditionGroup}
+            />
+          ) : (
+            <Condition key={index} condition={condition} innerRef={addRef} />
+          )
+        })}
+      </Box>
+    </Box>
+  )
 }
