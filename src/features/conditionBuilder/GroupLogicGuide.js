@@ -1,35 +1,50 @@
 import React, { useEffect, useRef, useState } from 'react'
 
+const ARROW_HEIGHT = 60
+
 export function GroupLogicGuide({ nodeList }) {
   const canvasRef = useRef()
   const [arrowPoints, setArrowPoints] = useState([])
 
   useEffect(() => {
     nodeList.forEach((node) =>
-      setArrowPoints((prevState) => prevState.concat(node.offsetTop))
+      setArrowPoints((prevState) => prevState.concat(calculateTop(node)))
     )
   }, [nodeList])
 
-  const canvasOffset = canvasRef.current && canvasRef.current.offsetTop
+  const buildLinePoints = () => {
+    if (!nodeList.length) return
 
-  const lineState =
-    nodeList.length && `40, ${nodeList[0].offsetTop - 20 - canvasOffset}`
-  const endLine =
-    nodeList.length &&
-    `40, ${nodeList[nodeList.length - 1].offsetTop + 10 - canvasOffset}`
+    const firstElem = nodeList[0]
+    const lastElem = nodeList[nodeList.length - 1]
+    const canvasWidth = canvasRef.current.clientWidth
 
-  const lineString = [lineState, endLine].join(' ')
+    const lineStart = `${canvasWidth / 2}, ${lastElem.offsetTop + 10}`
+    const lineTurn = `${canvasWidth / 2}, ${firstElem.offsetTop - 10}`
+    const lineEnd = `${canvasWidth}, ${firstElem.offsetTop - 10}`
+    return [lineStart, lineTurn, lineEnd].join(' ')
+  }
+
+  const calculateTop = (node) => {
+    return node.offsetTop + (node.clientHeight - ARROW_HEIGHT) / 2
+  }
 
   return (
     <div ref={canvasRef}>
       <svg ref={canvasRef} width="80px" height="100%">
-        <polyline points={lineString} stroke="black" strokeDasharray="4" />
-        {arrowPoints.map((node) => (
+        <polyline
+          points={buildLinePoints()}
+          stroke="black"
+          fill="none"
+          strokeDasharray="4"
+        />
+        {arrowPoints.map((node, index) => (
           <rect
-            height="60"
-            width="60"
+            key={index}
+            height={ARROW_HEIGHT}
+            width={ARROW_HEIGHT}
             x="10"
-            y={node - canvasRef.current.offsetTop}
+            y={node}
           />
         ))}
       </svg>

@@ -13,7 +13,7 @@ export function ConditionGroup({ group }) {
   }
 
   return (
-    <Box display="flex">
+    <Box display="flex" position="relative">
       <GroupLogicGuide nodeList={conditionRefs.current} />
       <Box flexGrow="1">
         {group.conditions.map((condition, index) => {
