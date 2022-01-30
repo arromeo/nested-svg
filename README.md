@@ -1,4 +1,4 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This was a proof-of-concept for creating a recursively rendered tree component that provides a UI for building complex logical expressions.
 
 ## Available Scripts
 
